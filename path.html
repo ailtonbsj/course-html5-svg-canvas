@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Using path</title>
+</head>
+
+<body>
+    <svg width="" height="" viewBox="0 0 600 250" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+       <rect width="100%" height="100%" style="fill: gray;"/>
+        <path d="M 200 62
+                 L 400 62
+                 L 400 187
+                 L 200 187 z"
+             fill="none" stroke="white" stroke-width="1" />
+        <path d="M 250 70 l 100 0 l 0 100 l -100 0 z"
+             fill="none" stroke="blue" stroke-width="3" />
+        <path d="M 300 125 h 30 v 30 h -30 l -15 -15 z"
+             fill="none" stroke="red" stroke-width="4" />
+             
+        <line x1="50" y1="50"
+              x2="75" y2="100"
+              stroke="white"
+              stroke-width="2">
+              <animate attributeType="XML"
+              attributeName="y2"
+              from="50" to="200"
+              dur="10s"
+              repeatCount="indefinite"/>
+        </line>
+        <circle cx="50" cy="50" r="2" style="fill: black;"/>
+        <circle cx="100" cy="50" r="2" style="fill: black;"/>
+        <circle cx="75" cy="100" r="2" style="fill: black;">
+            <animate attributeType="XML"
+                attributeName="cy"
+                from="50" to="200"
+                dur="10s"
+                repeatCount="indefinite"/>
+        </circle>
+        <path d="M 50,50 C 50,50 75,100 100,50"
+             fill="none" stroke="red" stroke-width="2">
+             <animate attributeType="XML"
+             attributeName="d"
+             from="M 50,50 C 50,50 75,50 100,50" to="M 50,50 C 50,50 75,200 100,50"
+             dur="10s"
+             repeatCount="indefinite"/>    
+        </path>
+
+        <line x1="475" y1="50"
+              x2="500" y2="100"
+              stroke="white"
+              stroke-width="2"/>
+        <circle cx="475" cy="50" r="2" style="fill: black;"/>
+        <circle cx="525" cy="50" r="2" style="fill: black;"/>
+        <circle cx="500" cy="100" r="2" style="fill: black;"/>
+        <path d="M 475,50 S 500,100 525,50 "
+             fill="none" stroke="green" stroke-width="2" />     
+    </svg>
+</body>
+
+</html>
