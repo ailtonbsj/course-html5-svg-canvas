@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Using Cubic Bézier Curve</title>
+</head>
+
+<body>
+    <svg width="" height="" viewBox="0 0 600 250" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <rect x="" y="" width="100%" height="100%" style="fill: gray;"/>
+        <!-- Cubic Bézier curve with absolute coordinates -->
+        <path d="M 10,90 
+                C 30,90 25,10 50,10 
+                S 70,90 90,90" 
+            fill="none" stroke="red" stroke-width="2" />
+
+        <!-- Cubic Bézier curve with relative coordinates -->
+        <path d="M 110,90
+                 c 20,0 15,-80 40,-80
+                 s 20,80 40,80"
+            fill="none" stroke="red" stroke-width="2" />
+
+        <g id="ControlPoints">
+            <line x1="10" y1="90"
+                  x2="30" y2="90"
+                  stroke="lightgray"
+                  stroke-width="2"/>
+            
+            <line x1="50" y1="10"
+                  x2="25" y2="10"
+                  stroke="lightgray"
+                  stroke-width="2"/>
+
+            <circle cx="30" cy="90" r="1.5"/>
+            <circle cx="25" cy="10" r="1.5"/>
+
+            <line x1="50" y1="10"
+                  x2="75" y2="10"
+                  stroke="lightgray"
+                  stroke-width="2" stroke-dasharray="2"/>
+            
+                  <line x1="90" y1="90"
+                  x2="70" y2="90"
+                  stroke="lightgray"
+                  stroke-width="2"/>
+
+            <circle cx="75" cy="10" r="1.5" fill="lightgrey"/>
+            <circle cx="70" cy="90" r="1.5" />
+            
+            <circle cx="10" cy="90" r="1.5"/>
+            <circle cx="50" cy="10" r="1.5"/>
+            <circle cx="90" cy="90" r="1.5"/>
+        </g>
+        <use xlink:href="#ControlPoints" x="100" />
+    </svg>
+</body>
+
+</html>
