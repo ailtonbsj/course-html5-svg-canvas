@@ -10,6 +10,7 @@
         body {
             margin: 0;
             padding: 0;
+            overscroll-behavior-y: contain;
         }
     </style>
 </head>
@@ -17,7 +18,9 @@
 <body>
     <svg width="100%" height="500px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
        <rect width="100%" height="100%" style="fill:gray;"/>
-       <path id="bezier" d="M 10,10 C 10,200 200,200 200,10"
+        <line id="line1" x1="10" y1="10" x2="10" y2="200" stroke="lightgray" stroke-width="4"/>
+        <line id="line2" x1="200" y1="200" x2="200" y2="10" stroke="lightgray" stroke-width="4"/>
+        <path id="bezier" d="M 10,10 C 10,200 200,200 200,10"
             fill="none" stroke="red" stroke-width="4" />
         <circle id="pointStart" cx="10" cy="10" r="5" style="fill:black;"/>
         <circle id="pointControl1" cx="10" cy="200" r="5" style="fill:black;"/>
@@ -35,6 +38,8 @@
         let pointEnd = document.querySelector("svg #pointEnd");
         let pointControl1 = document.querySelector("svg #pointControl1");
         let pointControl2 = document.querySelector("svg #pointControl2");
+        let line1 = document.querySelector("svg #line1");
+        let line2 = document.querySelector("svg #line2");
         let bezier = document.querySelector("svg #bezier");
 
         let isLocked = false;
@@ -62,6 +67,14 @@
                 let endY = pointEnd.getAttribute("cy");
                 let d = `M ${startX},${startY} C ${ctl1X},${ctl1Y} ${ctl2X},${ctl2Y} ${endX},${endY}`;
                 bezier.setAttribute("d", d);
+                line1.setAttribute("x1", startX);
+                line1.setAttribute("y1", startY);
+                line1.setAttribute("x2", ctl1X);
+                line1.setAttribute("y2", ctl1Y);
+                line2.setAttribute("x1", endX);
+                line2.setAttribute("y1", endY);
+                line2.setAttribute("x2", ctl2X);
+                line2.setAttribute("y2", ctl2Y);
             }
         }
 
@@ -86,6 +99,16 @@
             circle.onmouseup = endMove;
             circle.ontouchend = endMove;
         });
+
+        function isTouchDevice() {
+            return typeof window.ontouchstart !== 'undefined';
+        }
+
+        if (isTouchDevice()) {
+            document.querySelectorAll("svg circle").forEach(function(circle) {
+                circle.setAttribute("r", 17);
+            });
+        }
     </script>
 </body>
 
