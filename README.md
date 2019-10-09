@@ -10,3 +10,4 @@ This is a list of code from MDN about SVG and Canvas.
 - [Animate](animate.html)
 - [Paths](path.html)
 - [Cubic Bézier Curve](cubic-bezier-curve.html)
+- [Cubic Bézier Curve Editor](cubic-bezier-editor.html)
