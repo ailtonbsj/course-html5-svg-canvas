@@ -12,3 +12,6 @@ This is a list of code from MDN about SVG and Canvas.
 - [Cubic Bézier Curve](cubic-bezier-curve.html)
 - [Cubic Bézier Curve Editor](cubic-bezier-editor.html)
 - [Quadratic Bézier Curve](quadratic-bezier-curve.html)
+- [Elliptical Arc Curve](elliptical-arc-curve.html)
+- [PathLength attribute](path-length.html)
+- [Animate Motion](animate-motion.html)
