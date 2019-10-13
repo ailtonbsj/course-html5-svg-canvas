@@ -17,3 +17,4 @@ This is a list of code from MDN about SVG and Canvas.
 - [Animate Motion](animate-motion.html)
 - [Animate Motion with rotate](animate-motion-rotate.html)
 - [Animate with colors](animate-color.html)
+- [Animate Transform](animate-transform.html)
