@@ -15,3 +15,4 @@ This is a list of code from MDN about SVG and Canvas.
 - [Elliptical Arc Curve](elliptical-arc-curve.html)
 - [PathLength attribute](path-length.html)
 - [Animate Motion](animate-motion.html)
+- [Animate Motion with rotate](animate-motion-rotate.html)
