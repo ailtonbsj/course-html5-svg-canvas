@@ -16,3 +16,4 @@ This is a list of code from MDN about SVG and Canvas.
 - [PathLength attribute](path-length.html)
 - [Animate Motion](animate-motion.html)
 - [Animate Motion with rotate](animate-motion-rotate.html)
+- [Animate with colors](animate-color.html)
