@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Logic Ports</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overscroll-behavior-y: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <svg id="area" width="100%" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <rect width="100%" height="100%" style="fill: lightgray;"/>
+        <g id="and" style="display: none;">
+            <path d="M 0,0 L 15 0 A 15 15 0 1 1 15 30 L 0 30 Z"
+                 fill="white" stroke="black" stroke-width="2" />
+            <line x1="-10" y1="7"
+                  x2="0" y2="7"
+                  stroke="black"
+                  stroke-width="2"/>
+            <line x1="-10" y1="23"
+                  x2="0" y2="23"
+                  stroke="black"
+                  stroke-width="2"/>
+            <line x1="30" y1="15"
+                  x2="40" y2="15"
+                  stroke="black"
+                  stroke-width="2"/>
+            <circle cx="-10" cy="7" r="5" stroke="black"/>
+            <circle cx="-10" cy="23" r="5" stroke="black"/>
+            <circle cx="40" cy="15" r="5" stroke="black"/>
+        </g>
+        <path style="display: none;" id="simpleCable" d="M 0,0 L 10,10"
+             fill="none" stroke="black" stroke-width="2" />
+        <!-- <use xlink:href="#and" x="40" y="40" /> -->
+    </svg>
+    <button id="btnAnd">AND</button>
+</body>
+
+<script>
+    let area = document.querySelector("#area");
+    let portAnd = document.querySelector("#and");
+    let btnAnd = document.querySelector("#btnAnd");
+    let simpleCable = document.querySelector("#simpleCable");
+    let port, cable;
+    let ports = {};
+    let contPort = 0;
+    let contCable = 0;
+    let isDraging = false;
+    let isCabling = false;
+    let finishedCable = false;
+    btnAnd.onclick = function() {
+        isDraging = true;
+        port = portAnd.cloneNode(true);
+        port.style.display = "block";
+        port.setAttribute("id", `port${contPort}`);
+        contPort++;
+        port.onclick = function() {
+            if (!isCabling) {
+                if (isDraging) {
+                    isDraging = false;
+                    port = null;
+                } else if (!finishedCable) {
+                    finishedCable = false;
+                    port = this;
+                    isDraging = true;
+                }
+            }
+        }
+
+        port.querySelectorAll("circle").forEach(function(circle) {
+            circle.onclick = function() {
+                console.log("clicked circle");
+                if (isCabling) {
+                    cable = null;
+                    isCabling = false;
+                    finishedCable = true;
+                } else {
+                    isCabling = true;
+                    let portX = parseFloat(this.parentElement.getAttribute("data-x"));
+                    let portY = parseFloat(this.parentElement.getAttribute("data-y"));
+                    let pinX = portX + parseFloat(this.getAttribute("cx"));
+                    let pinY = portY + parseFloat(this.getAttribute("cy"));
+
+                    cable = simpleCable.cloneNode(true);
+                    cable.style.display = "block";
+                    cable.setAttribute("id", `cable${contCable}`);
+                    contCable++;
+                    cable.setAttribute("data-x0", pinX);
+                    cable.setAttribute("data-y0", pinY);
+                    area.appendChild(cable);
+                }
+            };
+        });
+        // port.querySelectorAll("path").forEach(function(path) {
+        //     path.onclick = function() {
+        //         if (!isDraging) {
+        //             console.log("path clicked");
+        //             isDraging = true;
+        //             let id = path.parentElement.getAttribute("id");
+        //             port = document.querySelector("#" + id);
+        //         }
+
+        //     }
+        // });
+        ports[port.getAttribute("id")] = port;
+        area.appendChild(port);
+    }
+
+    area.onmousemove = function(event) {
+        if (port) {
+            port.setAttribute("transform",
+                `translate(${event.clientX},${event.clientY})`);
+            port.setAttribute("data-x", event.clientX);
+            port.setAttribute("data-y", event.clientY);
+        }
+        if (cable) {
+            let x0 = parseFloat(cable.getAttribute("data-x0"));
+            let y0 = parseFloat(cable.getAttribute("data-y0"));
+            let x2 = event.clientX;
+            let y2 = event.clientY;
+            let x1 = ((x2 - x0) / 2) + x0;
+            let y1 = ((y2 - y0) / 2) + y0;
+
+            cable.setAttribute("d",
+                `M ${x0},${y0} L ${x1},${y0} ${x1},${y2} ${x2-1},${y2-1}`);
+        }
+    }
+</script>
+
+</html>
