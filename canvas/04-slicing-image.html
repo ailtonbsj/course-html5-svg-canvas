@@ -18,47 +18,67 @@
         }
 
         #canvas {
-            border: 1px solid black;
+            /* border: 1px solid black; */
+        }
+        #preview {
+            display: none;
         }
     </style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
-    <button>Apply</button>
+    <canvas id="preview"></canvas>
+    <button id="apply">Crop</button>
     <script>
         const screenX = document.body.clientWidth;
         const screenY = document.body.clientHeight;
         const c = document.getElementById('canvas');
+        const preview = document.getElementById('preview');
         const ctx = c.getContext('2d');
+        const btn = document.getElementById('apply');
 
         let m = { x: 0, y: 0 };
         let p1 = { x: 0, y: 0, r: 10 };
         let p2 = { x: 0, y: 0, r: 10 };
+        let pActive;
         let isMoving = false;
-
-        let pointActive;
-
-        let active = false;
+        let hasImageLoaded = false;
         let factor;
 
+        function draw(hasCropping = false) {
+            ctx.clearRect(0, 0, img.width, img.height);
+            ctx.drawImage(img, 0, 0);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fillRect(0, 0, img.width, img.height);
+            ctx.drawImage(img,
+                p1.x, p1.y,
+                p2.x - p1.x, p2.y - p1.y,
+                p1.x, p1.y,
+                p2.x - p1.x, p2.y - p1.y);
+            if (!hasCropping) {
+                ctx.beginPath();
+                ctx.fillStyle = 'black';
+                ctx.arc(p1.x, p1.y, p1.r, 0, 2 * Math.PI);
+                ctx.arc(p2.x, p2.y, p2.r, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
         c.addEventListener('mousemove', (ev) => {
-            m.x = ev.offsetX;
-            m.y = ev.offsetY;
+            m.x = ev.offsetX / factor;
+            m.y = ev.offsetY / factor;
             if (Math.abs(p1.x - m.x) <= p1.r && Math.abs(p1.y - m.y) <= p1.r)
-                pointActive = p1;
+                pActive = p1;
             else if (Math.abs(p2.x - m.x) <= p2.r && Math.abs(p2.y - m.y) <= p2.r)
-                pointActive = p2;
+                pActive = p2;
 
             if (isMoving) {
-                pointActive.x = m.x;
-                pointActive.y = m.y;
+                pActive.x = m.x;
+                pActive.y = m.y;
             }
-            if (active) {
-                draw();
-            }
+            if (hasImageLoaded) draw();
         });
-
         c.addEventListener('mousedown', () => isMoving = true);
         c.addEventListener('mouseup', () => isMoving = false);
 
@@ -74,33 +94,31 @@
             }
             c.width = imgW;
             c.height = imgH;
-            //ctx.scale(factor, factor);
+            ctx.scale(factor, factor);
             p1.x = 10;
             p1.y = 10;
             p2.x = img.width - 10;
             p2.y = img.height - 10;
-            active = true;
+            p1.r = 10 / factor;
+            p2.r = 10 / factor;
+            hasImageLoaded = true;
             draw();
         });
-        img.src = 'land.jpg';
+        img.src = 'portrait.jpg';
 
-        function draw() {
-            ctx.drawImage(img, 0, 0);
+        btn.addEventListener('click', () => {
+            draw(true);
+            const cropped = ctx.getImageData(p1.x * factor, p1.y * factor, (p2.x - p1.x) * factor, (p2.y - p1.y) * factor);
+            ctx.putImageData(cropped, 0, 0);
+            
+            preview.width = cropped.width;
+            preview.height = cropped.height;
+            const pctx = preview.getContext('2d');
+            pctx.putImageData(cropped, 0, 0);
+            console.log(preview.toDataURL('image/png'));
+            preview.toBlob((v) => console.log(v));
+        });
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-            ctx.fillRect(0, 0, img.width, img.height);
-            ctx.drawImage(img,
-                p1.x, p1.y,
-                p2.x - p1.x, p2.y - p1.y,
-                p1.x, p1.y,
-                p2.x - p1.x, p2.y - p1.y);
-
-            ctx.beginPath();
-            ctx.fillStyle = 'black';
-            ctx.arc(p1.x, p1.y, 10, 0, 2 * Math.PI);
-            ctx.arc(p2.x, p2.y, 10, 0, 2 * Math.PI);
-            ctx.fill();
-        }
     </script>
 </body>
 
