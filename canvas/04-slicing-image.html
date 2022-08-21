@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slicing Image</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <button>Apply</button>
+    <script>
+        const screenX = document.body.clientWidth;
+        const screenY = document.body.clientHeight;
+        const c = document.getElementById('canvas');
+        const ctx = c.getContext('2d');
+
+        let m = { x: 0, y: 0 };
+        let p1 = { x: 0, y: 0, r: 10 };
+        let p2 = { x: 0, y: 0, r: 10 };
+        let isMoving = false;
+
+        let pointActive;
+
+        let active = false;
+        let factor;
+
+        c.addEventListener('mousemove', (ev) => {
+            m.x = ev.offsetX;
+            m.y = ev.offsetY;
+            if (Math.abs(p1.x - m.x) <= p1.r && Math.abs(p1.y - m.y) <= p1.r)
+                pointActive = p1;
+            else if (Math.abs(p2.x - m.x) <= p2.r && Math.abs(p2.y - m.y) <= p2.r)
+                pointActive = p2;
+
+            if (isMoving) {
+                pointActive.x = m.x;
+                pointActive.y = m.y;
+            }
+            if (active) {
+                draw();
+            }
+        });
+
+        c.addEventListener('mousedown', () => isMoving = true);
+        c.addEventListener('mouseup', () => isMoving = false);
+
+        const img = new Image();
+        img.addEventListener('load', () => {
+            factor = (screenX / img.width) * 0.95;
+            let imgW = img.width * factor;
+            let imgH = img.height * factor;
+            if (imgW > screenX || imgH > screenY) {
+                factor = (screenY / img.height) * 0.95;
+                imgW = img.width * factor;
+                imgH = img.height * factor;
+            }
+            c.width = imgW;
+            c.height = imgH;
+            //ctx.scale(factor, factor);
+            p1.x = 10;
+            p1.y = 10;
+            p2.x = img.width - 10;
+            p2.y = img.height - 10;
+            active = true;
+            draw();
+        });
+        img.src = 'land.jpg';
+
+        function draw() {
+            ctx.drawImage(img, 0, 0);
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fillRect(0, 0, img.width, img.height);
+            ctx.drawImage(img,
+                p1.x, p1.y,
+                p2.x - p1.x, p2.y - p1.y,
+                p1.x, p1.y,
+                p2.x - p1.x, p2.y - p1.y);
+
+            ctx.beginPath();
+            ctx.fillStyle = 'black';
+            ctx.arc(p1.x, p1.y, 10, 0, 2 * Math.PI);
+            ctx.arc(p2.x, p2.y, 10, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    </script>
+</body>
+
+</html>
