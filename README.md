@@ -26,3 +26,4 @@ This is a list of code from MDN about SVG and Canvas.
 - [Getting Started](canvas/01-getting-started.html)
 - [Bézier Curve Editor](canvas/02-bezier-editor.html)
 - [Transformations](canvas/03-transformations.html)
+- [Crop Image](canvas/04-slicing-image.html)
